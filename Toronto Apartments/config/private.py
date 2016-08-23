@@ -1,4 +1,4 @@
-import os 
+SLACK_TOKEN = "xoxp-65955659840-65962774757-71237534758-3febd3ef15"
 
 #min rent per month
 MIN_PRICE = 800
@@ -172,14 +172,3 @@ SLACK_CHANNEL = "#housing"
 
 
 SLACK_TOKEN = os.getenv("SLACK_TOKEN", "xoxp-65955659840-65962774757-71237534758-3febd3ef15")
-
-try:
-	from private import *
-except Exception:
-	pass 
-
-#any external private settings import here
-try:
-	from config.private import * 
-except Exception:
-	pass 

@@ -9,7 +9,7 @@ if __name__ == "__main__":
 		print("{}: Starting scrape cycle".format(time.ctime()))
 		try:
 			do_scrape()
-		except Keyboard Interrupt:
+		except KeyboardInterrupt:
 			print("Exiting....")
 			sys.exit(1)
 		except Exception as exc:

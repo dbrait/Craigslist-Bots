@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Float, Boolean
 from sqlalchemy.orm import sessionmaker
 from dateutil.parser import parse 
 from util import post_listing_to_slack, find_points_of_interest
-from stackclient import stackClient 
+from slackclient import SlackClient 
 import time 
 import settings 
 
@@ -52,7 +52,7 @@ def scrape_area(area):
 	while True:
 		try:
 			result = next(gen)
-		except = StopIteration:
+		except StopIteration:
 			break
 		except Exception:
 			continue 
@@ -76,7 +76,7 @@ def scrape_area(area):
 				result.update(geo_data)
 			else:
 				result["area"] = ""
-				result["bart"] = ""
+				result["ttc"] = ""
 
 			#try parsing price
 			price = 0
@@ -105,26 +105,26 @@ def scrape_area(area):
 			session.commit()
 
 			#return result if its near ttc station or if in area defined
-			if len(result["ttc"]) > 0 or len(result["area"]) > 0
+			if len(result["ttc"]) > 0 or len(result["area"]) > 0:
 				results.append(result)
 
 		return results
 
-	def do_scrape():
-		"""
-		runs craigslist scraper, and posts data to slack 
-		"""
+def do_scrape():
+	"""
+	runs craigslist scraper, and posts data to slack 
+	"""
 
-		#create slack client 
-		sc = SlackClient(settings.SLACK_TOKEN)
+	#create slack client 
+	sc = SlackClient(settings.SLACK_TOKEN)
 
-		#get results from craigslist
-		all_results = []
-		for area in settings.AREAS:
-			all_results += scrape_area(area)
+	#get results from craigslist
+	all_results = []
+	for area in settings.AREAS:
+		all_results += scrape_area(area)
 
-		print("{}: Got {} results.".format(time.ctime(), len(all_results)))
+	print("{}: Got {} results.".format(time.ctime(), len(all_results)))
 
-		#post each result to slack 
-		for result in all_results:
-			post_listing_to_slack(sc, result)
+	#post each result to slack 
+	for result in all_results:
+		post_listing_to_slack(sc, result)
